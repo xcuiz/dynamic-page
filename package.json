@@ -1,0 +1,29 @@
+{
+  "name": "dynamic-page",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "serve": "vite preview",
+    "start": "node ./server/index.js"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "body-parser": "^1.19.1",
+    "element-plus": "^1.2.0-beta.5",
+    "express": "^4.17.1",
+    "fs-extra": "^10.0.0",
+    "lodash": "^4.17.21",
+    "vue": "^3.2.16",
+    "vue-router": "4.0.12"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.11",
+    "@vitejs/plugin-vue": "^1.9.3",
+    "prettier": "^2.5.1",
+    "sass": "^1.44.0",
+    "typescript": "^4.4.3",
+    "vite": "^2.6.4",
+    "vue-tsc": "^0.3.0"
+  }
+}
