@@ -107,7 +107,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
 import { createTablePager, PAGER_YPE } from "@/util/tablePager";
-import { dynamicOptionsAsync } from "@/http";
+import { dynamicOptionsAsync, tableListAsync } from "./http";
 
 const createSearchModel = () => ({
   userName: "",
@@ -176,20 +176,15 @@ export default defineComponent({
 
     const { tablePager, pageSizeChange, pageNumChange } = createTablePager({
       pagerType: PAGER_YPE.LOCAL,
-      $data: Array.from({ length: 30 }).map((v) => ({
-        userName: `哈哈`,
-        gender: Math.random() > 0.5 ? "男" : "女",
-        createTime: "2020-01-12",
-        remark:
-          "爱上了对方就爱上了对方就阿是登录分级阿斯蒂芬立刻就阿萨德咖啡机阿是登录分级按时来得快放假阿斯蒂芬了就",
-      })),
+      getData: tableListAsync,
     });
+    tablePager.body = searchModel;
 
     /**
      * 查询
      */
     const toSearch = () => {
-      console.log("to search");
+      tablePager.doGetData();
     };
 
     /**
@@ -200,6 +195,8 @@ export default defineComponent({
 
       dom?.resetFields();
     };
+
+    toSearch();
 
     return {
       searchModel,

@@ -161,14 +161,18 @@ export class TablePager extends Pager {
     this.loading = true
     try {
       if (this.getData) {
-        const { content, total }: { content: Array<unknown>; total: number } = await this.getData(this.body)
+        const { data } = await this.getData(this.body)
 
-        this.data = content || []
+        if (data) {
+          const { content, total, } = data
 
-        if (this.pagerType === PAGER_YPE.REMOTE) {
-          this.total = total || 0
-        } else {
-          this.total = content?.length || 0
+          this.data = content || []
+
+          if (this.pagerType === PAGER_YPE.REMOTE) {
+            this.total = total || 0
+          } else {
+            this.total = content?.length || 0
+          }
         }
       }
     } catch (e: any) {
