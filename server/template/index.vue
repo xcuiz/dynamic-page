@@ -57,7 +57,7 @@
       <div class="page-content">
         <!-- 表格 -->
         <div class="content-table">
-          <el-table :data="tablePager.data" border style="width: 100%">
+          <el-table :data="tablePager.data" border style="width: 100%" v-loading="tablePager.loading">
             <el-table-column
               v-for="column of columns"
               :key="column.prop"
@@ -171,6 +171,8 @@ export default defineComponent({
       const dom: any = searchDom.value
 
       dom?.resetFields();
+
+      toSearch()
     }
 
     toSearch()
