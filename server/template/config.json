@@ -1,0 +1,51 @@
+{
+  "pageTitle": "用户",
+  "pageName": "user-info",
+  "search": {
+    "labelWidth": 60,
+    "labelPosition": "left",
+    "fieldInfos": [
+      {
+        "unique": 23412341,
+        "label": "用户名",
+        "name": "userName",
+        "formType": "input",
+        "clearable": true,
+        "defaultValue": ""
+      },
+      {
+        "unique": 123,
+        "label": "性别",
+        "name": "gender",
+        "formType": "select",
+        "clearable": true,
+        "defaultValue": "",
+        "sourceFrom": "local",
+        "options": [
+          { "label": "男", "value": "0" },
+          { "label": "女", "value": "1" }
+        ]
+      },
+      {
+        "unique": 1640330713278,
+        "label": "来源",
+        "name": "source",
+        "formType": "select",
+        "clearable": true,
+        "defaultValue": "",
+        "sourceFrom": "api",
+        "options": "",
+        "optionsApi": "/api/source",
+        "optionsApiFunction": "return list.map(({ code, name }) => ({ label: name, value: code }))"
+      }
+    ]
+  },
+  "table": {
+    "columns": [
+      { "label": "用户名", "prop": "userName", "width": null },
+      { "label": "性别", "prop": "gender", "width": "50" },
+      { "label": "备注", "prop": "remark", "showOverflowTooltip": true },
+      { "label": "创建时间", "prop": "createTime", "sortable": true }
+    ]
+  }
+}

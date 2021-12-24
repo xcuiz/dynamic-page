@@ -93,6 +93,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import { createTablePager, PAGER_YPE } from '@/util/tablePager'
+import { dynamicOptionsAsync } from '@/http'
 
 const createSearchModel = () => ({
   <% _.forEach(search.fieldInfos, field => { %>
@@ -121,6 +122,29 @@ export default defineComponent({
       <% }) %>
     }
 
+    const getOptions = async (optionName: string, url: string, formatter: string | null) => {
+      try {
+        const { data } = await dynamicOptionsAsync(url)
+
+        if (Array.isArray(data)) {
+
+          if (formatter) {
+            const fn = new Function('list', formatter)
+
+            searchOptions[optionName] = fn(data)
+          } else {
+            searchOptions[optionName] = data
+          }
+        }
+      } catch (e) {}
+    }
+
+    <% _.forEach(search.fieldInfos, field => { %>
+      <% if (field.formType === 'select' && field.sourceFrom === 'api') { %>
+    getOptions("<%= field.name %>", "<%= field.optionsApi %>", "<%= field.optionsApiFunction %>")
+      <% } %>
+    <% }) %>
+
     const columns = <%= JSON.stringify(table.columns) %>
 
     const {
@@ -128,7 +152,13 @@ export default defineComponent({
       pageSizeChange,
       pageNumChange
     } = createTablePager({
-      pagerType: PAGER_YPE.LOCAL
+      pagerType: PAGER_YPE.LOCAL,
+      $data: Array.from({ length: 30 }).map((v) => ({
+        userName: `哈哈`,
+        gender: Math.random() > 0.5 ? '男' : '女',
+        createTime: '2020-01-12',
+        remark: '爱上了对方就爱上了对方就阿是登录分级阿斯蒂芬立刻就阿萨德咖啡机阿是登录分级按时来得快放假阿斯蒂芬了就'
+      }))
     })
 
     /**

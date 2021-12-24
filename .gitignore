@@ -5,5 +5,5 @@ dist-ssr
 *.local
 .vscode
 
-src/preview/index.vue
+src/preview/**.*
 
