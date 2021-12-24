@@ -1,6 +1,6 @@
-import { SearchField, SearchSourceFrom } from '../../interface'
+import { SearchField, SearchSourceFrom, FormRule } from '../../interface'
 
-export const addFieldInfoRule = (rules: any , index: number) => {
+export const addFieldInfoRule = (rules: FormRule, index: number) => {
   rules[`search.fieldInfos.${index}.label`] = [{
     required: true,
     message: '搜索名必填'

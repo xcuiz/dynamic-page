@@ -43,9 +43,24 @@ export interface Column {
   showOverflowTooltip: boolean
 }
 
+export interface Table {
+  pageNum: number,
+  pageSize: number,
+  api: string,
+  columns: Array<Column>
+}
+
 export interface DynamicPageConfig {
   pageTitle: string,
   pageName: string,
   search: Search | null,
-  table: Array<Column>
+  table: Table
+}
+
+export interface FormRule {
+  [x: string]: {
+    required?: boolean;
+    message?: string;
+    validator?: (rule: any, value: any, callback: Function) => void
+  }[]
 }

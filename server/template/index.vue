@@ -114,10 +114,10 @@ export default defineComponent({
     /**
      * 查询组件是select时的下拉数据
      */
-    const searchOptions = {
+    const searchOptions: { [x: string]: { label: string; value: string | number }[] } = {
       <% _.forEach(search.fieldInfos, field => { %>
         <% if (field.formType === 'select') { %>
-          <%= field.name %>: <%= JSON.stringify(field.options) %>,
+          <%= field.name %>: <% if(field.options) { %> <%= JSON.stringify(field.options) %> <% } %> <% if(!field.options) { %>[]<% } %>,
         <% } %>
       <% }) %>
     }

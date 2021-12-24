@@ -130,13 +130,15 @@ export default defineComponent({
     /**
      * 查询组件是select时的下拉数据
      */
-    const searchOptions = {
+    const searchOptions: {
+      [x: string]: { label: string; value: string | number }[];
+    } = {
       gender: [
         { label: "男", value: "0" },
         { label: "女", value: "1" },
       ],
 
-      source: "",
+      source: [],
     };
 
     const getOptions = async (

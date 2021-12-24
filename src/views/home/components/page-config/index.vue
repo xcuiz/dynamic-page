@@ -41,6 +41,9 @@
               <el-form-item label="搜索字段: " :prop="`search.fieldInfos.${index}.name`">
                 <el-input v-model="fieldInfo.name" placeholder="请输入搜索字段" />
               </el-form-item>
+              <el-form-item label="搜索默认值: ">
+                <el-input v-model="fieldInfo.defaultValue" placeholder="请输入搜索默认值" />
+              </el-form-item>
               <el-form-item label="搜索类型: ">
                 <el-select v-model="fieldInfo.formType" placeholder="请选择搜索类型" style="width: 100%">
                   <el-option
@@ -102,6 +105,9 @@
           </div>
 
           <div class="split-title">表格: </div>
+          <el-form-item label="表格API: " prop="table.api">
+            <el-input v-model="pageConfigModel.table.api" placeholder="请输入表格API" />
+          </el-form-item>
         </el-form>
       </div>
       <div class="page-config-btn">
@@ -126,7 +132,12 @@ export default defineComponent({
       pageTitle: '',
       pageName: '',
       search: null,
-      table: []
+      table: {
+        pageNum: 1,
+        pageSize: 10,
+        api: '',
+        columns: []
+      }
     })
     const pageConfigRules = ref({
       pageTitle: [{
@@ -140,6 +151,10 @@ export default defineComponent({
       'search.labelWidth': [{
         required: true,
         message: 'label宽必填'
+      }],
+      'table.api': [{
+        required: true,
+        message: '表格api必填'
       }]
     })
 
@@ -193,26 +208,6 @@ export default defineComponent({
       })
     }
 
-    const optionsMap = ref({})
-    const addOptionsMap = async (fieldInfo: SearchField) => {
-      if (fieldInfo.optionsApi) {
-        try {
-          const { data } = await dynamicOptionsAsync(fieldInfo.optionsApi)
-
-          let result = data
-          if (fieldInfo.optionsApiFunction) {
-            const fn = new Function('list', fieldInfo.optionsApiFunction)
-
-            fn(result)
-          }
-
-          (optionsMap.value as any)[fieldInfo.name] = result
-        } catch (e) {
-          (optionsMap.value as any)[fieldInfo.name] = []
-        }
-      }
-    }
-
     const getPreviewPageConfigAsync = async () => {
       loading.value = true
       try {
@@ -222,10 +217,6 @@ export default defineComponent({
           const rules: any = pageConfigRules.value
 
           addFieldInfoRule(rules, index)
-
-          if (item.formType === SearchFormType.SELECT) {
-            addOptionsMap(item)
-          }
         })
         
         Object.assign(pageConfigModel, data)
@@ -243,8 +234,6 @@ export default defineComponent({
       formDom,
       toPreview,
       toAddSearch,
-
-      optionsMap,
 
       optionsToJson,
       optionsToJs,
