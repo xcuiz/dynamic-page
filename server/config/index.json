@@ -47,6 +47,8 @@
       { "label": "备注", "prop": "remark", "showOverflowTooltip": true },
       { "label": "创建时间", "prop": "createTime", "sortable": true }
     ],
-    "api": "/api/list"
+    "api": "/api/list",
+    "selection": true,
+    "index": true
   }
 }

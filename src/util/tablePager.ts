@@ -87,6 +87,8 @@ export class TablePager extends Pager {
   filterKey?: string | null = null
   filterValue?: string | null = null
 
+  selection: unknown[] = []
+
   static DefaultTablePagerOption: TablePagerOption = {
     $data: [],
     pageNum: DEFAULT_PAGE_NUM,
@@ -169,7 +171,7 @@ export class TablePager extends Pager {
           this.data = content || []
 
           if (this.pagerType === PAGER_YPE.REMOTE) {
-            this.total = total || 0
+            this.$total = total || 0
           } else {
             this.total = content?.length || 0
           }
@@ -191,10 +193,9 @@ export class TablePager extends Pager {
   }
 
   pageSizeChange (pageSize: number) {
+    this.pageSize = pageSize
     // 此处重置pageNum
     this.pageNumChange(DEFAULT_PAGE_NUM)
-
-    this.pageSize = pageSize
   }
 
   reset () {
@@ -217,9 +218,22 @@ export const createTablePager = (options?: TablePagerOption) => {
     tablePager.pageNumChange(pageNum)
   }
 
+  const sortChange = ({ column, prop, order }: { column: unknown; prop: string; order: string }) => {
+    tablePager.sortField = prop
+    tablePager.sortType = order
+
+    tablePager.doGetData()
+  }
+
+  const selectionChange = (selection: unknown[]) => {
+    tablePager.selection = selection
+  }
+
   return {
     tablePager,
     pageSizeChange,
-    pageNumChange
+    pageNumChange,
+    sortChange,
+    selectionChange
   }
 }

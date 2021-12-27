@@ -47,6 +47,14 @@ export interface Table {
   pageNum: number,
   pageSize: number,
   api: string,
+  /**
+   * 多选
+   */
+  selection: boolean,
+  /**
+   * 索引
+   */
+  index: boolean,
   columns: Array<Column>
 }
 

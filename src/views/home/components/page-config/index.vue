@@ -108,6 +108,18 @@
           <el-form-item label="表格API: " prop="table.api">
             <el-input v-model="pageConfigModel.table.api" placeholder="请输入表格API" />
           </el-form-item>
+          <el-form-item label="多选: ">
+            <el-radio-group v-model="pageConfigModel.table.selection">
+              <el-radio :label="true">是</el-radio>
+              <el-radio :label="false">否</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="索引: ">
+            <el-radio-group v-model="pageConfigModel.table.index">
+              <el-radio :label="true">是</el-radio>
+              <el-radio :label="false">否</el-radio>
+            </el-radio-group>
+          </el-form-item>
         </el-form>
       </div>
       <div class="page-config-btn">
@@ -119,9 +131,9 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, Ref } from 'vue'
-import { previewPageAsync, previewPageConfigAsync, dynamicOptionsAsync } from '@/http'
+import { previewPageAsync, previewPageConfigAsync } from '@/http'
 import { addFieldInfoRule, optionsToJson, optionsToJs, sourceFromChange } from './index'
-import { SearchFormType, SearchField, SearchSourceFrom, DynamicPageConfig } from '../../interface'
+import { SearchFormType, SearchSourceFrom, DynamicPageConfig } from '../../interface'
 
 export default defineComponent({
   name: 'page-config',
@@ -136,6 +148,8 @@ export default defineComponent({
         pageNum: 1,
         pageSize: 10,
         api: '',
+        selection: true,
+        index: true,
         columns: []
       }
     })

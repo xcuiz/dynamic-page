@@ -68,11 +68,26 @@
         <!-- 表格 -->
         <div class="content-table">
           <el-table
-            :data="tablePager.data"
             border
+            size="mini"
             style="width: 100%"
+            :data="tablePager.data"
             v-loading="tablePager.loading"
+            @sort-change="sortChange"
+            @selection-change="selectionChange"
           >
+            <el-table-column type="selection" width="55" v-if="true" />
+
+            <el-table-column>
+              <template #default="scope">
+                {{
+                  tablePager.pageSize * (tablePager.pageNum - 1) +
+                  scope.$index +
+                  1
+                }}
+              </template>
+            </el-table-column>
+
             <el-table-column
               v-for="column of columns"
               :key="column.prop"
@@ -97,8 +112,9 @@
           <el-pagination
             small
             background
-            layout="total, prev, pager, next, jumper, ->"
-            :current-page="tablePager.pageNum"
+            layout="total, prev, pager, next, sizes, jumper, ->"
+            v-model:current-page="tablePager.pageNum"
+            :page-size="tablePager.pageSize"
             :total="tablePager.total"
             @size-change="pageSizeChange"
             @current-change="pageNumChange"
@@ -110,68 +126,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
-import { createTablePager, PAGER_YPE } from "@/util/tablePager";
-import { dynamicOptionsAsync, tableListAsync } from "./http";
-
-const createSearchModel = () => ({
-  userName: "",
-
-  gender: "",
-
-  source: "",
-});
+import { defineComponent } from "vue";
+import useTablePager from "./useTablePager";
+import useOptions from "./useOptions";
 
 export default defineComponent({
   name: "user-info",
   setup() {
-    const searchDom = ref(null);
-
-    /**
-     * 表单
-     */
-    const searchModel = reactive(createSearchModel());
-
-    /**
-     * 查询组件是select时的下拉数据
-     */
-    const searchOptions: {
-      [x: string]: { label: string; value: string | number }[];
-    } = {
-      gender: [
-        { label: "男", value: "0" },
-        { label: "女", value: "1" },
-      ],
-
-      source: [],
-    };
-
-    const getOptions = async (
-      optionName: string,
-      url: string,
-      formatter: string | null
-    ) => {
-      try {
-        const { data } = await dynamicOptionsAsync(url);
-
-        if (Array.isArray(data)) {
-          if (formatter) {
-            const fn = new Function("list", formatter);
-
-            searchOptions[optionName] = fn(data);
-          } else {
-            searchOptions[optionName] = data;
-          }
-        }
-      } catch (e) {}
-    };
-
-    getOptions(
-      "source",
-      "/api/source",
-      "return list.map(({ code, name }) => ({ label: name, value: code }))"
-    );
-
     const columns = [
       { label: "用户名", prop: "userName", width: null },
       { label: "性别", prop: "gender", width: "50" },
@@ -179,42 +140,36 @@ export default defineComponent({
       { label: "创建时间", prop: "createTime", sortable: true },
     ];
 
-    const { tablePager, pageSizeChange, pageNumChange } = createTablePager({
-      pagerType: PAGER_YPE.LOCAL,
-      getData: tableListAsync,
-    });
-    tablePager.body = searchModel;
+    const searchOptions = useOptions();
 
-    /**
-     * 查询
-     */
-    const toSearch = () => {
-      tablePager.doGetData();
-    };
-
-    /**
-     * 重置查询表单
-     */
-    const toReset = () => {
-      const dom: any = searchDom.value;
-
-      dom?.resetFields();
-
-      toSearch();
-    };
-
-    toSearch();
-
-    return {
-      searchModel,
-      searchDom,
-      toSearch,
-      toReset,
-      searchOptions,
-      columns,
+    const {
       tablePager,
       pageSizeChange,
       pageNumChange,
+      sortChange,
+      selectionChange,
+
+      searchModel,
+
+      toSearch,
+      toReset,
+    } = useTablePager();
+
+    return {
+      searchOptions,
+
+      columns,
+
+      tablePager,
+      pageSizeChange,
+      pageNumChange,
+      sortChange,
+      selectionChange,
+
+      searchModel,
+
+      toSearch,
+      toReset,
     };
   },
 });

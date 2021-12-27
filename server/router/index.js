@@ -7,12 +7,10 @@ const ResponseBody = require('../ResponseBody')
 
 const router = Router()
 
+// 模板文件位置
 const templatePath = path.resolve(__dirname, '../template')
+// 预览文件位置
 const previewPath = path.resolve(__dirname, '../../src/preview')
-// 模板文件
-const templateFile = path.resolve(__dirname, '../template/index.vue')
-// 预览文件
-const previewFile = path.resolve(__dirname, '../../src/preview/index.vue')
 // 配置文件(用于生成预览文件)
 const configFile = path.resolve(__dirname, '../config/index.json')
 
@@ -83,14 +81,22 @@ router.use('/source', async (req, res) => {
 })
 
 router.use('/list', async (req, res) => {
+  const { pageNum, pageSize } = req.body
+
+  const result = Array.from({ length: 100 }).map((item, index) => ({
+    userName: `哈哈${index + 1}`,
+    gender: '男',
+    remark: '',
+    createTime: '2021-01-01'
+  }))
+
+  const sliceResult = result.slice((pageNum - 1) * pageSize, pageNum * pageSize)
+
   const responseBody = new ResponseBody(200, '', {
-    content: [{
-      userName: '哈哈',
-      gender: '男',
-      remark: '',
-      createTime: '2021-01-01'
-    }],
-    total: 100
+    content: sliceResult,
+    total: result.length,
+    pageNum: pageNum, 
+    pageSize: pageSize
   })
   res.json(responseBody)
 })

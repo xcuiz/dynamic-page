@@ -57,7 +57,25 @@
       <div class="page-content">
         <!-- 表格 -->
         <div class="content-table">
-          <el-table :data="tablePager.data" border style="width: 100%" v-loading="tablePager.loading">
+          <el-table
+            border
+            size="mini"
+            style="width: 100%"
+            :data="tablePager.data"
+            v-loading="tablePager.loading"
+            @sort-change="sortChange"
+            @selection-change="selectionChange"
+          >
+            <% if (table.selection) { %>
+            <el-table-column type="selection" width="55" v-if="<%= table.selection %>" />
+            <% } %>
+            <% if (table.index) { %>
+            <el-table-column>
+              <template #default="scope">
+                {{ tablePager.pageSize * (tablePager.pageNum - 1) + scope.$index + 1 }}
+              </template>
+            </el-table-column>
+            <% } %>
             <el-table-column
               v-for="column of columns"
               :key="column.prop"
@@ -78,8 +96,9 @@
           <el-pagination
             small
             background
-            layout="total, prev, pager, next, jumper, ->"
-            :current-page="tablePager.pageNum"
+            layout="total, prev, pager, next, sizes, jumper, ->"
+            v-model:current-page="tablePager.pageNum"
+            :page-size="tablePager.pageSize"
             :total="tablePager.total"
             @size-change="pageSizeChange"
             @current-change="pageNumChange"
@@ -91,102 +110,45 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
-import { createTablePager, PAGER_YPE } from '@/util/tablePager'
-import { dynamicOptionsAsync, tableListAsync } from './http'
-
-const createSearchModel = () => ({
-  <% _.forEach(search.fieldInfos, field => { %>
-    <%= field.name %>: '<%= field.defaultValue %>',
-  <% }) %>
-})
+import { defineComponent } from 'vue'
+import useTablePager from './useTablePager'
+import useOptions from './useOptions'
 
 export default defineComponent({
   name: '<%= pageName %>',
   setup () {
-    const searchDom = ref(null)
-
-    /**
-     * 表单
-     */
-    const searchModel = reactive(createSearchModel())
-
-    /**
-     * 查询组件是select时的下拉数据
-     */
-    const searchOptions: { [x: string]: { label: string; value: string | number }[] } = {
-      <% _.forEach(search.fieldInfos, field => { %>
-        <% if (field.formType === 'select') { %>
-          <%= field.name %>: <% if(field.options) { %> <%= JSON.stringify(field.options) %> <% } %> <% if(!field.options) { %>[]<% } %>,
-        <% } %>
-      <% }) %>
-    }
-
-    const getOptions = async (optionName: string, url: string, formatter: string | null) => {
-      try {
-        const { data } = await dynamicOptionsAsync(url)
-
-        if (Array.isArray(data)) {
-
-          if (formatter) {
-            const fn = new Function('list', formatter)
-
-            searchOptions[optionName] = fn(data)
-          } else {
-            searchOptions[optionName] = data
-          }
-        }
-      } catch (e) {}
-    }
-
-    <% _.forEach(search.fieldInfos, field => { %>
-      <% if (field.formType === 'select' && field.sourceFrom === 'api') { %>
-    getOptions("<%= field.name %>", "<%= field.optionsApi %>", "<%= field.optionsApiFunction %>")
-      <% } %>
-    <% }) %>
-
     const columns = <%= JSON.stringify(table.columns) %>
+
+    const searchOptions = useOptions()
 
     const {
       tablePager,
       pageSizeChange,
-      pageNumChange
-    } = createTablePager({
-      pagerType: PAGER_YPE.LOCAL,
-      getData: tableListAsync
-    })
-    tablePager.body = searchModel
+      pageNumChange,
+      sortChange,
+      selectionChange,
 
-    /**
-     * 查询
-     */
-    const toSearch = () => {
-      tablePager.doGetData()
-    }
+      searchModel,
 
-    /**
-     * 重置查询表单
-     */
-    const toReset = () => {
-      const dom: any = searchDom.value
-
-      dom?.resetFields();
-
-      toSearch()
-    }
-
-    toSearch()
+      toSearch,
+      toReset
+    } = useTablePager()
 
     return {
-      searchModel,
-      searchDom,
-      toSearch,
-      toReset,
       searchOptions,
+
       columns,
+      
       tablePager,
       pageSizeChange,
-      pageNumChange
+      pageNumChange,
+      sortChange,
+      selectionChange,
+
+      searchModel,
+
+      toSearch,
+      toReset
     }
   }
 })
