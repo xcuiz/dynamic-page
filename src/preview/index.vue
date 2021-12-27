@@ -54,6 +54,22 @@
                 </el-select>
               </el-form-item>
 
+              <el-form-item label="数据库名: " prop="dbName" label-width="80px">
+                <el-select
+                  v-model="searchModel.dbName"
+                  placeholder="请选择数据库名"
+                  :clearable="true"
+                >
+                  <el-option
+                    v-for="(option, index) of searchOptions.dbName"
+                    :key="index"
+                    :disabled="option.disabled"
+                    :label="option.label"
+                    :value="option.value"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+
               <el-form-item label=" " label-width="20px">
                 <el-button @click="toSearch" type="primary">查询</el-button>
                 <el-button @click="toReset">重置</el-button>
@@ -115,7 +131,7 @@
             layout="total, prev, pager, next, sizes, jumper, ->"
             v-model:current-page="tablePager.pageNum"
             :page-size="tablePager.pageSize"
-            :total="tablePager.total"
+            :total="1001"
             @size-change="pageSizeChange"
             @current-change="pageNumChange"
           />

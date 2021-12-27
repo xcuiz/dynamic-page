@@ -11,12 +11,20 @@
               ref="searchDom"
               size="mini"
               :model="searchModel"
+              <% if (search.labelWidth) { %>
               label-width="<%= search.labelWidth %>px"
+              <% } %>
               label-position="<%= search.labelPosition %>"
             >
 
               <% _.forEach(search.fieldInfos, field => { %>
-                  <el-form-item label="<%= field.label %>: " prop="<%= field.name %>">
+                  <el-form-item
+                    label="<%= field.label %>: "
+                    prop="<%= field.name %>"
+                    <% if (field.labelWidth) { %>
+                    label-width="<%= field.labelWidth %>px"
+                    <% } %>
+                  >
                     
                       <% if (field.formType === 'input') { %>
                         <el-input

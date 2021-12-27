@@ -80,6 +80,20 @@ router.use('/source', async (req, res) => {
   res.json(responseBody)
 })
 
+router.use('/dbs', async (req, res) => {
+  const responseBody = new ResponseBody(200, '', [{
+    label: 'oracle',
+    value: 'oracle'
+  }, {
+    label: 'mysql',
+    value: 'mysql'
+  }, {
+    label: 'ch',
+    value: 'ch'
+  }])
+  res.json(responseBody)
+})
+
 router.use('/list', async (req, res) => {
   const { pageNum, pageSize } = req.body
 

@@ -11,7 +11,8 @@
         "name": "userName",
         "formType": "input",
         "clearable": true,
-        "defaultValue": ""
+        "defaultValue": "",
+        "labelWidth": null
       },
       {
         "unique": 123,
@@ -24,7 +25,8 @@
         "options": [
           { "label": "男", "value": "0" },
           { "label": "女", "value": "1" }
-        ]
+        ],
+        "labelWidth": null
       },
       {
         "unique": 1640330713278,
@@ -36,7 +38,21 @@
         "sourceFrom": "api",
         "options": "",
         "optionsApi": "/api/source",
-        "optionsApiFunction": "return list.map(({ code, name }) => ({ label: name, value: code }))"
+        "optionsApiFunction": "return list.map(({ code, name }) => ({ label: name, value: code }))",
+        "labelWidth": null
+      },
+      {
+        "unique": 1640596171718,
+        "label": "数据库名",
+        "name": "dbName",
+        "formType": "select",
+        "clearable": true,
+        "defaultValue": "",
+        "sourceFrom": "api",
+        "options": "",
+        "optionsApi": "/api/dbs",
+        "optionsApiFunction": null,
+        "labelWidth": "80"
       }
     ]
   },

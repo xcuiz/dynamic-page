@@ -26,7 +26,8 @@ export interface SearchField {
   sourceFrom: SearchSourceFrom | null,
   options: Array<SearchSelectOptions> | string,
   optionsApi: string | null,
-  optionsApiFunction: string | null
+  optionsApiFunction: string | null,
+  labelWidth: string | null
 }
 
 export interface Search {

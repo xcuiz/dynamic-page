@@ -24,7 +24,7 @@
           <div v-if="pageConfigModel.search">
             <div class="split-title">搜索: </div>
             <el-form-item label="label宽: " prop="search.labelWidth">
-              <el-input v-model="pageConfigModel.search.labelWidth" placeholder="请输入label宽" />
+              <el-input v-model="pageConfigModel.search.labelWidth" placeholder="请输入label宽(搜索条件的所有label宽度)" />
             </el-form-item>
             <el-form-item label="label位置: ">
               <el-radio-group v-model="pageConfigModel.search.labelPosition">
@@ -43,6 +43,9 @@
               </el-form-item>
               <el-form-item label="搜索默认值: ">
                 <el-input v-model="fieldInfo.defaultValue" placeholder="请输入搜索默认值" />
+              </el-form-item>
+              <el-form-item label="label宽: ">
+                <el-input v-model="fieldInfo.labelWidth" placeholder="请输入label宽(搜索条件当前的label宽度)" />
               </el-form-item>
               <el-form-item label="搜索类型: ">
                 <el-select v-model="fieldInfo.formType" placeholder="请选择搜索类型" style="width: 100%">
@@ -218,7 +221,8 @@ export default defineComponent({
         sourceFrom: SearchSourceFrom.LOCAL,
         options: '',
         optionsApi: null,
-        optionsApiFunction: null
+        optionsApiFunction: null,
+        labelWidth: null
       })
     }
 

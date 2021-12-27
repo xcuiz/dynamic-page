@@ -3,7 +3,7 @@ import { dynamicOptionsAsync } from './http'
 
 const syncSelectSearchOptions = [<% _.forEach(search.fieldInfos, field => { %>
   <% if (field.formType === 'select' && field.sourceFrom === 'api') { %>
-    <%= JSON.stringify(field) %>
+    <%= JSON.stringify(field) %>,
   <% } %>
 <% }) %>]
 
