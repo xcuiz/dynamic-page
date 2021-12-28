@@ -65,6 +65,8 @@
     ],
     "api": "/api/list",
     "selection": true,
-    "index": true
+    "index": true,
+    "sortType": "descending",
+    "sortField": "createTime"
   }
 }

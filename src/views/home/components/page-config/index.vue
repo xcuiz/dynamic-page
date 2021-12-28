@@ -123,6 +123,15 @@
               <el-radio :label="false">否</el-radio>
             </el-radio-group>
           </el-form-item>
+          <el-form-item label="排序字段: ">
+            <el-input v-model="pageConfigModel.table.sortField" placeholder="请输入默认排序字段" />
+          </el-form-item>
+          <el-form-item label="排序类型: ">
+            <el-radio-group v-model="pageConfigModel.table.sortType">
+              <el-radio :label="SortType.ASCENDING">升序</el-radio>
+              <el-radio :label="SortType.DESCENDING">降序</el-radio>
+            </el-radio-group>
+          </el-form-item>
         </el-form>
       </div>
       <div class="page-config-btn">
@@ -136,7 +145,7 @@
 import { defineComponent, reactive, ref, Ref } from 'vue'
 import { previewPageAsync, previewPageConfigAsync } from '@/http'
 import { addFieldInfoRule, optionsToJson, optionsToJs, sourceFromChange } from './index'
-import { SearchFormType, SearchSourceFrom, DynamicPageConfig } from '../../interface'
+import { SortType, SearchFormType, SearchSourceFrom, DynamicPageConfig } from '../../interface'
 
 export default defineComponent({
   name: 'page-config',
@@ -153,6 +162,8 @@ export default defineComponent({
         api: '',
         selection: true,
         index: true,
+        sortField: null,
+        sortType: SortType.DESCENDING,
         columns: []
       }
     })
@@ -258,7 +269,8 @@ export default defineComponent({
       sourceFromChange,
 
       SearchFormType,
-      SearchSourceFrom
+      SearchSourceFrom,
+      SortType
     }
   },
 })

@@ -1,12 +1,3 @@
-<!--
- * @Author: your name
- * @Date: 2021-12-02 16:41:24
- * @LastEditTime: 2021-12-13 17:35:58
- * @LastEditors: Please set LastEditors
- * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- * @FilePath: \dynamic-page\src\views\index\index.vue
--->
-
 <template>
   <div class="home-container">
     <div class="home-box">
@@ -17,7 +8,7 @@
         <!-- 页面预览 -->
         <div class="content-page-preview">
           <!-- 利用热更新实现预览 -->
-          <preview />
+          <component :is="previewComponent" />
         </div>
         <!-- 页面配置 -->
         <div class="content-page-config">
@@ -29,15 +20,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import Preview from '@/preview/index.vue'
+import { defineComponent, defineAsyncComponent } from 'vue'
 import PageConfig from './components/page-config/index.vue'
 
 export default defineComponent({
   name: 'home',
   components: {
     PageConfig,
-    Preview
+    preview: defineAsyncComponent(() => import('@/preview/index.vue'))
+  },
+  setup () {
+    const previewComponent = 'preview'
+    return {
+      previewComponent
+    }
   }
 })
 </script>

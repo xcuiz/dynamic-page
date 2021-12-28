@@ -88,6 +88,7 @@
             size="mini"
             style="width: 100%"
             :data="tablePager.data"
+            :default-sort="{ prop: 'createTime', order: 'descending' }"
             v-loading="tablePager.loading"
             @sort-change="sortChange"
             @selection-change="selectionChange"
@@ -131,7 +132,7 @@
             layout="total, prev, pager, next, sizes, jumper, ->"
             v-model:current-page="tablePager.pageNum"
             :page-size="tablePager.pageSize"
-            :total="1001"
+            :total="tablePager.total"
             @size-change="pageSizeChange"
             @current-change="pageNumChange"
           />

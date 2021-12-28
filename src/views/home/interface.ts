@@ -8,6 +8,17 @@ export enum SearchSourceFrom {
   LOCAL = 'local'
 }
 
+export enum SortType {
+  /**
+   * 升序
+   */
+  ASCENDING = 'ascending',
+  /**
+   * 降序
+   */
+  DESCENDING = 'descending'
+}
+
 export interface SearchSelectOptions {
   label: string,
   value: string | number
@@ -56,6 +67,14 @@ export interface Table {
    * 索引
    */
   index: boolean,
+  /**
+   * 默认排序字段
+   */
+  sortField: string | null,
+  /**
+   * 默认排序类型
+   */
+  sortType: SortType | string | null,
   columns: Array<Column>
 }
 

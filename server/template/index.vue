@@ -70,6 +70,7 @@
             size="mini"
             style="width: 100%"
             :data="tablePager.data"
+            :default-sort="{ prop: '<%= table.sortField %>', order: '<%= table.sortType %>' }"
             v-loading="tablePager.loading"
             @sort-change="sortChange"
             @selection-change="selectionChange"
